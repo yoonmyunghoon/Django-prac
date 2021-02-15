@@ -1,4 +1,4 @@
-# Django Blog Project
+# Django-prac | Blog Project
 
 
 
