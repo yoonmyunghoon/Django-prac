@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 
 {% block body %}
 {% if request.resolver_match.url_name == 'create' %}
@@ -9,19 +10,24 @@
     <hr>
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <!-- {{ form.as_p }} -->
+        {% bootstrap_form form layout='horizontal' %}
+        {% buttons submit="Submit" reset="Cancel" %}{% endbuttons %}
         <!-- <label for="title">Title</label><br>
         <input type="text" name="title" id="title"><br>
         <label for="content">Content</label><br>
         <textarea name="content" id="content" cols="30" rows="10"></textarea><br>
         <label for="image">image</label><br>
         <input type="file" name="image" id="image" accept="image/*"><br> -->
-        <input type="submit" value="글쓰기">
+        <!-- {% if request.resolver_match.url_name == 'create' %}
+            <input type="submit" value="글쓰기">
+        {% else %}
+            <input type="submit" value="글수정">
+        {% endif %} -->
     </form>
     {% if request.resolver_match.url_name == 'create' %}
         <a href="{% url 'articles:index' %}">[메인페이지로]</a>
     {% else %}
         <a href="{% url 'articles:detail' article.pk %}">[글 상세보기]</a>
     {% endif %}
-    
 {% endblock %}
