@@ -4,6 +4,7 @@
 {% block body %}
     <h1 class="text-center">Articles</h1>
     <img src="{% static 'images/simpsons.jpg' %}" alt="simpsons-image">
+    <img src="{% static 'articles/images/simpson.jpg' %}" alt="simpson-image">
     {% for article in articles %}
         <p>글 번호: {{ article.id }}</p>
         <p>글 제목: {{ article.title }}</p>

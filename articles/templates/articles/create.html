@@ -3,17 +3,16 @@
 
 {% block body %}
     <h1 class="text-center">NEW</h1>
-    <img src="{% static 'images/simpsons.jpg' %}" alt="simpsons-image">
-    <img src="{% static 'articles/images/simpson.jpg' %}" alt="simpson-image">
     <hr>
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="title">Title</label><br>
+        {{ form.as_p }}
+        <!-- <label for="title">Title</label><br>
         <input type="text" name="title" id="title"><br>
         <label for="content">Content</label><br>
         <textarea name="content" id="content" cols="30" rows="10"></textarea><br>
         <label for="image">image</label><br>
-        <input type="file" name="image" id="image" accept="image/*"><br>
+        <input type="file" name="image" id="image" accept="image/*"><br> -->
         <input type="submit" value="글쓰기">
     </form>
     <a href="{% url 'articles:index' %}">[메인페이지로]</a> 

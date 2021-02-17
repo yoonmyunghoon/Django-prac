@@ -11,12 +11,13 @@
     {% endif %}
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="title">Title</label><br>
+        {{ form.as_p }}
+        <!-- <label for="title">Title</label><br>
         <input type="text" name="title" id="title" value="{{ article.title }}"><br>
         <label for="content">Content</label><br>    
-        <textarea name="content" id="content" cols="30" rows="10">{{ article.content }}</textarea><br> <!--textarea는 value속성에 안적음-->
+        <textarea name="content" id="content" cols="30" rows="10">{{ article.content }}</textarea><br>
         <label for="image">Image</label>
-        <input type="file" name="image" id="image" accept="image/*">
+        <input type="file" name="image" id="image" accept="image/*"> -->
         <input type="submit" value="글수정">
     </form>
     <a href="{% url 'articles:index' %}">[메인페이지로]</a>

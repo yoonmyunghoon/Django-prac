@@ -4,7 +4,7 @@
 {% block body %}
     <h1 class="text-center">DETAIL</h1>
     {% if article.image %}
-        원본 이미지<img src="{{ article.image.url }}" alt="{{ article.image }}">
+        <img src="{{ article.image.url }}" alt="{{ article.image }}">
         <!-- 썸네일 이미지 <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image }}" -->
     {% else %}
         <img src="{% static 'articles/images/noimage.gif' %}" alt="noimage">
