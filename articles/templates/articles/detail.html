@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body %}
     <h1 class="text-center">DETAIL</h1>
+    {% if article.image %}
+        원본 이미지<img src="{{ article.image.url }}" alt="{{ article.image }}">
+        <!-- 썸네일 이미지 <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image }}" -->
+    {% else %}
+        <img src="{% static 'articles/images/noimage.gif' %}" alt="noimage">
+    {% endif %}
     <hr>
     <h2>{{ article.pk }}번글</h2> <!--.id와 .pk는 똑같음-->
     <p>글 제목: {{ article.title }}</p>
@@ -23,6 +30,8 @@
         <input type="submit" value="댓글 작성" class="btn btn-warning">
     </form>
     <hr>
+    <b><p>{{ comments|length }}개의 댓글</p></b>
+    <hr>
     <p><b>댓글 목록</b></p>
     {% for comment in comments %}
         <li>{{ comment.content }}</li>
@@ -30,6 +39,9 @@
             {% csrf_token %}
             <input type="submit" value="댓글 삭제" class="btn btn-danger">
         </form>
+        <a href="{% url 'articles:comments_update' article.pk comment.pk %}">[댓글 수정]</a>
+    {% empty %}
+        <b><p>댓글이 없습니다.</p></b>
     {% endfor %}
     <hr>
 

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2 class="text-center">Comment Update</h2>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="content">댓글</label>
+        <input type="text" name="content" id="content" value="{{ comment.content }}"><br>
+        <input type="submit" value="댓글 수정" class="btn btn-primary">
+    </form>
+{% endblock %}
