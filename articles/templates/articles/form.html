@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block body %}
-    <h1 class="text-center">NEW</h1>
+{% if request.resolver_match.url_name == 'create' %}
+    <h1 class="text-center">CREATE</h1>
+{% else %}
+    <h1 class="text-center">UPDATE</h1>
+{% endif %}
     <hr>
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -15,5 +18,10 @@
         <input type="file" name="image" id="image" accept="image/*"><br> -->
         <input type="submit" value="글쓰기">
     </form>
-    <a href="{% url 'articles:index' %}">[메인페이지로]</a> 
+    {% if request.resolver_match.url_name == 'create' %}
+        <a href="{% url 'articles:index' %}">[메인페이지로]</a>
+    {% else %}
+        <a href="{% url 'articles:detail' article.pk %}">[글 상세보기]</a>
+    {% endif %}
+    
 {% endblock %}

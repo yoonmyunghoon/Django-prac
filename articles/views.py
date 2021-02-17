@@ -14,17 +14,18 @@ def create(request):
     if request.method == "POST":
         form = ArticleForm(request.POST, request.FILES)
         if form.is_valid():
-            title = form.cleaned_data.get("title")
-            content = form.cleaned_data.get("content")
-            image = form.cleaned_data.get("image")
-            article = Article(title=title, content=content, image=image)
-            article.save()
+            # title = form.cleaned_data.get("title")
+            # content = form.cleaned_data.get("content")
+            # image = form.cleaned_data.get("image")
+            # article = Article(title=title, content=content, image=image)
+            # article.save()
+            article = form.save()
             return redirect("articles:detail", article.pk)
     else:
         form = ArticleForm()
 
     context = {"form": form}
-    return render(request, "articles/create.html", context)
+    return render(request, "articles/form.html", context)
 
 
 def detail(request, article_pk):
@@ -47,18 +48,20 @@ def delete(request, article_pk):
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == "POST":
-        form = ArticleForm(request.POST, request.FILES)
+        form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            article.title = form.cleaned_data.get("title")
-            article.content = form.cleaned_data.get("content")
-            if form.cleaned_data.get("image"):
-                article.image = form.cleaned_data.get("image")
-            article.save()
+            # article.title = form.cleaned_data.get("title")
+            # article.content = form.cleaned_data.get("content")
+            # if form.cleaned_data.get("image"):
+            #     article.image = form.cleaned_data.get("image")
+            # article.save()
+            form.save()
             return redirect("articles:detail", article.pk)
     else:
-        form = ArticleForm(initial=article.__dict__)
+        # form = ArticleForm(initial=article.__dict__)
+        form = ArticleForm(instance=article)
     context = {"form": form, "article": article}
-    return render(request, "articles/update.html", context)
+    return render(request, "articles/form.html", context)
 
 
 def comments_create(request, article_pk):
