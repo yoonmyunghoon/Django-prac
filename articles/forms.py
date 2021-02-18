@@ -1,10 +1,9 @@
 from django import forms
-from .models import Article
+from .models import Article, Comment
 
 
 class ArticleForm(forms.ModelForm):
     title = forms.CharField(
-        max_length=20,
         label="제목",
         widget=forms.TextInput(
             attrs={
@@ -74,3 +73,9 @@ class ArticleForm(forms.ModelForm):
 #             }
 #         ),
 #     )
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("content",)

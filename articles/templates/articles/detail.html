@@ -25,8 +25,9 @@
     <hr>
     <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
         {% csrf_token %}
-        <label for="content">COMMENT</label><br>
-        <input type="text" name="content" id="content"><br>
+        {{ comment_form.as_p }}
+        <!-- <label for="content">COMMENT</label><br>
+        <input type="text" name="content" id="content"><br> -->
         <input type="submit" value="댓글 작성" class="btn btn-warning">
     </form>
     <hr>

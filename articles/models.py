@@ -11,7 +11,7 @@ def articles_image_path(instance, filename):
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=30)
     content = models.TextField()
     # image = models.ImageField(blank=True)
     # image_thumbnail = ImageSpecField(
@@ -35,7 +35,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments")
-    content = models.CharField(max_length=30)
+    content = models.CharField(max_length=140)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

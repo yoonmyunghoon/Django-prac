@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ValidationError
 from .models import Article, Comment
-from .forms import ArticleForm
+from .forms import ArticleForm, CommentForm
 
 
 def index(request):
@@ -32,7 +32,12 @@ def detail(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
     comments = article.comments.all()
-    context = {"article": article, "comments": comments}
+    comment_form = CommentForm()
+    context = {
+        "article": article,
+        "comments": comments,
+        "comment_form": comment_form,
+    }
     return render(request, "articles/detail.html", context)
 
 
@@ -65,27 +70,39 @@ def update(request, article_pk):
 
 
 def comments_create(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
+    # article = Article.objects.get(pk=article_pk)
+    # article = get_object_or_404(Article, pk=article_pk)
     if request.method == "POST":
-        content = request.POST.get("content")
-        comment = Comment(article=article, content=content)
-        comment.save()
-    return redirect("articles:detail", article.pk)
+        # content = request.POST.get("content")
+        # comment = Comment(article=article, content=content)
+        # comment.save()
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.article_id = article_pk
+            comment.save()
+    return redirect("articles:detail", article_pk)
 
 
 def comments_delete(request, article_pk, comment_pk):
     if request.method == "POST":
-        comment = Comment.objects.get(pk=comment_pk)
+        comment = get_object_or_404(Comment, pk=comment_pk)
         comment.delete()
     return redirect("articles:detail", article_pk)
 
 
 def comments_update(request, article_pk, comment_pk):
-    comment = Comment.objects.get(pk=comment_pk)
+    comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == "POST":
-        comment.content = request.POST.get("content")
-        comment.save()
-        return redirect("articles:detail", article_pk)
+        # comment.content = request.POST.get("content")
+        # comment.save()
+        comment_form = CommentForm(request.POST, instance=comment)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.article_id = article_pk
+            comment.save()
+            return redirect("articles:detail", article_pk)
     else:
-        context = {"comment": comment}
-        return render(request, "articles/comment_update.html", context)
+        comment_form = CommentForm(instance=comment)
+    context = {"comment_form": comment_form}
+    return render(request, "articles/comment_update.html", context)
