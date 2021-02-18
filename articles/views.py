@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from IPython import embed
 
 
 def index(request):
@@ -11,6 +13,7 @@ def index(request):
     return render(request, "articles/index.html", context)
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         form = ArticleForm(request.POST, request.FILES)
@@ -43,6 +46,7 @@ def detail(request, article_pk):
 
 
 @require_POST
+@login_required
 def delete(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     article = get_object_or_404(Article, pk=article_pk)
@@ -54,6 +58,7 @@ def delete(request, article_pk):
     # return redirect("articles:detail", article.pk)
 
 
+@login_required
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == "POST":
@@ -74,6 +79,7 @@ def update(request, article_pk):
 
 
 @require_POST
+@login_required
 def comments_create(request, article_pk):
     # article = Article.objects.get(pk=article_pk)
     # article = get_object_or_404(Article, pk=article_pk)
@@ -96,6 +102,7 @@ def comments_create(request, article_pk):
 
 
 @require_POST
+@login_required
 def comments_delete(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     comment.delete()
@@ -106,6 +113,7 @@ def comments_delete(request, article_pk, comment_pk):
     # return redirect("articles:detail", article_pk)
 
 
+@login_required
 def comments_update(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == "POST":
