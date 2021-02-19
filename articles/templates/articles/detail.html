@@ -11,36 +11,47 @@
     {% endif %}
     <hr>
     <h2>{{ article.pk }}번글</h2> <!--.id와 .pk는 똑같음-->
+    <p><b>글 작성자: {{ article.user }}</b></p>
     <p>글 제목: {{ article.title }}</p>
     <p>글 내용: {{ article.content }}</p>
     <p>글 작성 시각: {{ article.created_at|date:"SHORT_DATE_FORMAT" }}</p>
     <p>글 수정 시각: {{ article.updated_at|date:"M, j, Y" }}</p>
     <hr>
-    <form action="{% url 'articles:delete' article.pk %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="글 삭제">
-    </form>
-    <a href="{% url 'articles:update' article.pk %}">[글 수정]</a><br>
+    {% if article.user == request.user %}
+        <form action="{% url 'articles:delete' article.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="글 삭제">
+        </form>
+        <a href="{% url 'articles:update' article.pk %}">[글 수정]</a><br>
+    {% endif %}
     <a href="{% url 'articles:index' %}">[메인 페이지로 가기]</a>
     <hr>
-    <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <!-- <label for="content">COMMENT</label><br>
-        <input type="text" name="content" id="content"><br> -->
-        <input type="submit" value="댓글 작성" class="btn btn-warning">
-    </form>
+    {% if user.is_authenticated %}
+        <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <!-- <label for="content">COMMENT</label><br>
+            <input type="text" name="content" id="content"><br> -->
+            <input type="submit" value="댓글 작성" class="btn btn-warning">
+        </form>
+    {% else %}
+        <a href="{% url 'accounts:login' %}">[로그인하고 댓글 달기]</a>
+    {% endif %}
     <hr>
     <b><p>{{ comments|length }}개의 댓글</p></b>
     <hr>
     <p><b>댓글 목록</b></p>
     {% for comment in comments %}
-        <li>{{ comment.content }}</li>
-        <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="댓글 삭제" class="btn btn-danger">
-        </form>
-        <a href="{% url 'articles:comments_update' article.pk comment.pk %}">[댓글 수정]</a>
+        <hr>
+        <p>작성자: <b>{{ comment.user }}</b></p>
+        <p>댓글: {{ comment.content }}</p>
+        {% if comment.user == request.user %}
+            <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="댓글 삭제" class="btn btn-danger">
+            </form>
+            <a href="{% url 'articles:comments_update' article.pk comment.pk %}">[댓글 수정]</a>
+        {% endif %}
     {% empty %}
         <b><p>댓글이 없습니다.</p></b>
     {% endfor %}

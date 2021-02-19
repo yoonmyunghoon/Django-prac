@@ -1,6 +1,7 @@
 from django.db import models
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import Thumbnail
+from django.conf import settings
 
 # 이미지 업로드 경로 커스텀
 # instance -> Article 모델의 인스턴스 객체
@@ -28,6 +29,7 @@ class Article(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.id}번글 - {self.title}: {self.content}"
@@ -38,6 +40,7 @@ class Comment(models.Model):
     content = models.CharField(max_length=140)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         ordering = [
