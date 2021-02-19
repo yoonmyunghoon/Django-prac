@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 
-{% block body %}
+{% block content %}
     {% if request.resolver_match.url_name == 'signup' %}
-        <h1>회원가입</h1>
+        <h1 class="text-center">회원가입</h1>
     {% elif request.resolver_match.url_name == 'login' %}
-        <h1>로그인</h1>
+        <h1 class="text-center">로그인</h1>
     {% elif request.resolver_match.url_name == 'update' %}
-        <h1>회원정보 수정</h1>
+        <h1 class="text-center">회원정보 수정</h1>
     {% else %}
-        <h1>비밀번호 수정</h1>
+        <h1 class="text-center">비밀번호 수정</h1>
     {% endif %}
+    <hr>
     <form action="" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons submit="Submit" reset="Cancel" %}{% endbuttons %}
     </form>
+    {% if request.resolver_match.url_name == 'update' %}
+        <form action="{% url 'accounts:delete' %}" method="POST" style="display: inline">
+            {% csrf_token %}
+            <input type="submit" value="회원탈퇴" class="btn btn-danger">
+        </form>
+    {% endif %}
 {% endblock %}

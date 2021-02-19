@@ -1,30 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block body %}
+{% block content %}
     <h1 class="text-center">DETAIL</h1>
-    {% if article.image %}
-        <img src="{{ article.image.url }}" alt="{{ article.image }}">
-        <!-- 썸네일 이미지 <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image }}" -->
-    {% else %}
-        <img src="{% static 'articles/images/noimage.gif' %}" alt="noimage">
-    {% endif %}
     <hr>
-    <h2>{{ article.pk }}번글</h2> <!--.id와 .pk는 똑같음-->
-    <p><b>글 작성자: {{ article.user }}</b></p>
-    <p>글 제목: {{ article.title }}</p>
-    <p>글 내용: {{ article.content }}</p>
-    <p>글 작성 시각: {{ article.created_at|date:"SHORT_DATE_FORMAT" }}</p>
-    <p>글 수정 시각: {{ article.updated_at|date:"M, j, Y" }}</p>
-    <hr>
-    {% if article.user == request.user %}
-        <form action="{% url 'articles:delete' article.pk %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="글 삭제">
-        </form>
-        <a href="{% url 'articles:update' article.pk %}">[글 수정]</a><br>
-    {% endif %}
-    <a href="{% url 'articles:index' %}">[메인 페이지로 가기]</a>
+    <div class="card">
+        <div class="card-header">
+            <p><b>No. {{ article.pk }}</b></p> <!--.id와 .pk는 똑같음-->
+            <p><b>Writer:</b> {{ article.user }}</p>
+            <p><b>Title:</b> {{ article.title }}</p>
+        </div>
+        <div class="card-body">
+            <p><b>Content:</b></p>
+            <hr>
+            {% if article.image %}
+                <img src="{{ article.image.url }}" class="img-thumbnail" alt="{{ article.image }}">
+                <hr>
+                <!-- 썸네일 이미지 <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image }}" -->
+            {% else %}
+                <img src="{% static 'articles/images/noimage.gif' %}" class="img-thumbnail" alt="noimage">
+                <hr>
+            {% endif %}
+            <br>
+            <p>{{ article.content }}</p>
+        </div>
+        <div class="card-footer">
+            <b>Created Time:</b> {{ article.created_at|date:"DATETIME_FORMAT" }}   /
+            <b>Updated Time:</b> {{ article.updated_at|date:"DATETIME_FORMAT" }}
+            <div class="btn-group float-right">
+                {% if article.user == request.user %}
+                    <form action="{% url 'articles:delete' article.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="글 삭제" class="btn btn-danger">
+                    </form>
+                    <a href="{% url 'articles:update' article.pk %}">
+                        <button type="button" class="btn btn-primary">글 수정</button>
+                    </a>
+                {% endif %}
+                <a href="{% url 'articles:index' %}">
+                    <button type="button" class="btn btn-success">목록</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <br>
+
     <hr>
     {% if user.is_authenticated %}
         <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
@@ -38,22 +58,33 @@
         <a href="{% url 'accounts:login' %}">[로그인하고 댓글 달기]</a>
     {% endif %}
     <hr>
-    <b><p>{{ comments|length }}개의 댓글</p></b>
-    <hr>
-    <p><b>댓글 목록</b></p>
+
+    <p><b>댓글 목록 ( {{ comments|length }}개의 댓글 )</b></p>
     {% for comment in comments %}
-        <hr>
-        <p>작성자: <b>{{ comment.user }}</b></p>
-        <p>댓글: {{ comment.content }}</p>
-        {% if comment.user == request.user %}
-            <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="댓글 삭제" class="btn btn-danger">
-            </form>
-            <a href="{% url 'articles:comments_update' article.pk comment.pk %}">[댓글 수정]</a>
-        {% endif %}
+        <div class="card">
+            <div class="card-header">
+                <p><b>Witer:</b> {{ comment.user }}</p>
+                <b>Created Time:</b> {{ comment.created_at|date:"DATETIME_FORMAT" }}   /
+                <b>Updated Time:</b> {{ comment.updated_at|date:"DATETIME_FORMAT" }}
+            </div>
+            <div class="card-body">
+                <p><b>Comment:</b> {{ comment.content }}</p>
+                {% if comment.user == request.user %}
+                    <div class="btn-group float-right">
+                        <a href="{% url 'articles:comments_update' article.pk comment.pk %}">
+                            <button type="button" class="btn btn-primary">댓글 수정</button>
+                        </a>
+                        <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" value="댓글 삭제" class="btn btn-danger">
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <br>
     {% empty %}
-        <b><p>댓글이 없습니다.</p></b>
+        <br><p>댓글이 없습니다.</p></hr>
     {% endfor %}
     <hr>
 

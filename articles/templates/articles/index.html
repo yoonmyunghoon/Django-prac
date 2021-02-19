@@ -1,21 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block body %}
+{% block content %}
     <h1 class="text-center">Articles</h1>
-    <img src="{% static 'images/simpsons.jpg' %}" alt="simpsons-image">
-    <img src="{% static 'articles/images/simpson.jpg' %}" alt="simpson-image">
-    {% if user.is_authenticated %}
-        <a href="{% url 'articles:create' %}">[글쓰기]</a>
-    {% else %}
-        <a href="{% url 'accounts:login' %}">[로그인해주세요]</a>
-    {% endif %}
-    {% for article in articles %}
-        <hr>
-        <p><b>글 작성자: {{ article.user }}</b></p>
-        <p>글 번호: {{ article.id }}</p>
-        <p>글 제목: {{ article.title }}</p>
-        <a href="{% url 'articles:detail' article.pk %}">[상세 글 보러가기]</a>
-    {% endfor %}
     <hr>
+    <!-- <img src="{% static 'images/simpsons.jpg' %}" alt="simpsons-image"> -->
+    <!-- <img src="{% static 'articles/images/simpson.jpg' %}" alt="simpson-image"> -->
+    {% for article in articles %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Title: {{ article.title }}</h4>
+                <p class="card-text">Writer: {{ article.user }}</p>
+                <a href="{% url 'articles:detail' article.pk %}" class="card-link">Detail</a>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
