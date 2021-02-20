@@ -7,12 +7,6 @@
     <!-- <img src="{% static 'images/simpsons.jpg' %}" alt="simpsons-image"> -->
     <!-- <img src="{% static 'articles/images/simpson.jpg' %}" alt="simpson-image"> -->
     {% for article in articles %}
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Title: {{ article.title }}</h4>
-                <p class="card-text">Writer: {{ article.user }}</p>
-                <a href="{% url 'articles:detail' article.pk %}" class="card-link">Detail</a>
-            </div>
-        </div>
+        {% include 'articles/_article.html' %}
     {% endfor %}
 {% endblock %}

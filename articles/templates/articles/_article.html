@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Title: {{ article.title }}</h4>
+        <p class="card-text">Writer: {{ article.user }}</p>
+        <a href="{% url 'articles:like' article.pk %}">
+            {% if user in article.like_users.all %}
+                <i class="fas fa-heart fa-lg" style="color:crimson"></i>
+            {% else %}
+                <i class="fas fa-heart fa-lg" style="color:black"></i>
+            {% endif %}
+        </a>
+        {{ article.like_users.all|length }}명이 이 글을 좋아합니다. <br><br>
+        <a href="{% url 'articles:detail' article.pk %}" class="card-link">Detail</a>
+    </div>
+</div>

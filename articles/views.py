@@ -8,7 +8,7 @@ from IPython import embed
 
 
 def index(request):
-    articles = Article.objects.order_by("-pk")
+    articles = Article.objects.all()
     context = {"articles": articles}
     return render(request, "articles/index.html", context)
 
@@ -140,3 +140,17 @@ def comments_update(request, article_pk, comment_pk):
         return render(request, "articles/comment_update.html", context)
     else:
         return redirect("articles:detail", article_pk)
+
+
+@login_required
+def like(request, article_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    user = request.user
+    if article.like_users.filter(pk=user.pk).exists():
+        article.like_users.remove(user)
+    else:
+        article.like_users.add(user)
+    if "/" + str(article_pk) + "/" in request.headers.get("Referer"):
+        return redirect("articles:detail", article_pk)
+    else:
+        return redirect("articles:index")
