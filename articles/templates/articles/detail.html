@@ -7,7 +7,7 @@
     <div class="card">
         <div class="card-header">
             <p><b>No. {{ article.pk }}</b></p> <!--.id와 .pk는 똑같음-->
-            <p><b>Writer:</b> {{ article.user }}</p>
+            <p><b>Writer:</b> <a href="{% url 'accounts:profile' article.user %}" class="card-link">{{ article.user }}</a></p>
             <p><b>Title:</b> {{ article.title }}</p>
             <a href="{% url 'articles:like' article.pk %}">
                 {% if user in article.like_users.all %}

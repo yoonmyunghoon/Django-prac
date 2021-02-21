@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Title: {{ article.title }}</h4>
-        <p class="card-text">Writer: {{ article.user }}</p>
+        <p class="card-text">Writer: <a href="{% url 'accounts:profile' article.user %}" class="card-link">{{ article.user }}</a></p>
         <a href="{% url 'articles:like' article.pk %}">
             {% if user in article.like_users.all %}
                 <i class="fas fa-heart fa-lg" style="color:crimson"></i>
