@@ -18,3 +18,9 @@
   - pilkit 2.0
   - django-imagekit 4.0.2
 - django-bootstrap4 2.3.1
+
+
+
+## 2. ERD
+
+![ERD](image/ERD.png)
