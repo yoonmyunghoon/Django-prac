@@ -1,0 +1,17 @@
+<h3 class="text-center">{{ person.username }}이 작성한 댓글</h3>
+<div class="row">
+    {% with comments=person.comment_set.all %}
+        {% for comment in comments %}
+            <div class="col-4 my-2">
+                <div class="card">
+                    <div class="card-body">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">{{ comment.content }}</p>
+                            <footer class="blockquote-footer">{{ comment.created_at|date:"SHORT_DATE_FORMAT" }}</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endwith %}
+</div>

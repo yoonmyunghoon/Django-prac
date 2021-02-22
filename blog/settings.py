@@ -132,3 +132,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# default: AUTH_USER_MODEL = 'auth.User'
+# AUTH_USER_MODEL = '앱이름.모델이름'
+AUTH_USER_MODEL = "accounts.User"
