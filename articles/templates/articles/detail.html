@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load make_link %}
 
 {% block content %}
     <h1 class="text-center">DETAIL</h1>
@@ -30,7 +31,7 @@
                 <hr>
             {% endif %}
             <br>
-            <p>{{ article.content }}</p>
+            <p>{{ article|hashtag_link|safe }}</p>
         </div>
         <div class="card-footer">
             <b>Created Time:</b> {{ article.created_at|date:"DATETIME_FORMAT" }}   /

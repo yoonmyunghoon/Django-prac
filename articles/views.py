@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ValidationError
-from .models import Article, Comment
+from .models import Article, Comment, Hashtag
 from .forms import ArticleForm, CommentForm
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -26,6 +26,11 @@ def create(request):
             article = form.save(commit=False)
             article.user_id = request.user.id
             article.save()
+
+            for word in article.content.split():
+                if word.startswith("#"):
+                    hashtag, created = Hashtag.objects.get_or_create(content=word)
+                    article.hashtags.add(hashtag)
             return redirect("articles:detail", article.pk)
     else:
         form = ArticleForm()
@@ -73,7 +78,12 @@ def update(request, article_pk):
                 # if form.cleaned_data.get("image"):
                 #     article.image = form.cleaned_data.get("image")
                 # article.save()
-                form.save()
+                article = form.save()
+                article.hashtags.clear()
+                for word in article.content.split():
+                    if word.startswith("#"):
+                        hashtag, created = Hashtag.objects.get_or_create(content=word)
+                        article.hashtags.add(hashtag)
                 return redirect("articles:detail", article.pk)
         else:
             # form = ArticleForm(initial=article.__dict__)
@@ -154,3 +164,11 @@ def like(request, article_pk):
         return redirect("articles:detail", article_pk)
     else:
         return redirect("articles:index")
+
+
+@login_required
+def hashtag(request, hash_pk):
+    hashtag = get_object_or_404(Hashtag, pk=hash_pk)
+    articles = hashtag.article_set.order_by("-pk")
+    context = {"hashtag": hashtag, "articles": articles}
+    return render(request, "articles/hashtag.html", context)

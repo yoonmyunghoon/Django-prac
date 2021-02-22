@@ -3,6 +3,14 @@ from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import Thumbnail
 from django.conf import settings
 
+
+class Hashtag(models.Model):
+    content = models.TextField(unique=True)
+
+    def __str__(self):
+        return self.content
+
+
 # 이미지 업로드 경로 커스텀
 # instance -> Article 모델의 인스턴스 객체
 # filename -> 사용자가 업로드한 파일의 이름
@@ -31,6 +39,7 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_articles", blank=True)
+    hashtags = models.ManyToManyField(Hashtag, blank=True)
 
     class Meta:
         ordering = ("-pk",)

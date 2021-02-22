@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Article, Comment
+from .models import Article, Comment, Hashtag
 
 
 @admin.register(Article)
@@ -23,3 +23,8 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(Comment, CommentAdmin)
+
+
+@admin.register(Hashtag)
+class HashtagAdmin(admin.ModelAdmin):
+    liset_display = ("content",)

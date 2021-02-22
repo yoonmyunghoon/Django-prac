@@ -13,4 +13,5 @@ urlpatterns = [
     path("<int:article_pk>/comments/<int:comment_pk>/delete/", views.comments_delete, name="comments_delete"),
     path("<int:article_pk>/comments/<int:comment_pk>/update/", views.comments_update, name="comments_update"),
     path("<int:article_pk>/like/", views.like, name="like"),
+    path("<int:hash_pk>/hashtag/", views.hashtag, name="hashtag"),
 ]
